@@ -243,3 +243,20 @@ pnpm dev
 # ou
 bun dev
 ```
+
+
+## Padronização dos commits
+
+feat: nova funcionalidade
+
+fix: correção de bug
+
+docs: documentação
+
+style: formatação, sem alteração de código (espaços, ponto e vírgula etc.)
+
+refactor: refatoração de código, sem alteração de funcionalidade
+
+test: testes adicionados ou modificados
+
+chore: tarefas de manutenção (ex: atualizar dependências)
