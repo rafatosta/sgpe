@@ -1,8 +1,34 @@
 import Image from "next/image";
+import { Button } from "flowbite-react";
 
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="flex flex-wrap gap-2">
+        <Button pill>Default</Button>
+        <Button color="alternative" pill>
+          Alternative
+        </Button>
+        <Button color="dark" pill>
+          Dark
+        </Button>
+        <Button color="light" pill>
+          Light
+        </Button>
+        <Button color="green" pill>
+          Green
+        </Button>
+        <Button color="red" pill>
+          Red
+        </Button>
+        <Button color="yellow" pill>
+          Yellow
+        </Button>
+        <Button color="purple" pill>
+          Purple
+        </Button>
+      </div>
+
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
