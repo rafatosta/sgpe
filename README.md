@@ -15,9 +15,9 @@
 
 ## 📦 Instalação e Configuração do Prisma
 
-- [ ] Instalar dependências do Prisma  
-- [ ] Inicializar o Prisma no projeto  
-- [ ] Verificar a criação da pasta `/prisma` e do arquivo `schema.prisma`
+- [x] Instalar dependências do Prisma  
+- [x] Inicializar o Prisma no projeto  
+- [x] Verificar a criação da pasta `/prisma` e do arquivo `schema.prisma`
 
 ---
 
