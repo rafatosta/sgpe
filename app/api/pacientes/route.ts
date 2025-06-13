@@ -13,13 +13,13 @@ export async function GET(request: Request) {
 
   const where = query
     ? {
-        OR: [
-          { nome: { contains: query, mode: 'insensitive' } },
-          { cpf: { contains: query, mode: 'insensitive' } },
-          { telefone: { contains: query, mode: 'insensitive' } },
-          { endereco: { contains: query, mode: 'insensitive' } },
-        ],
-      }
+      OR: [
+        { nome: { contains: query } },
+        { cpf: { contains: query } },
+        { telefone: { contains: query } },
+        { endereco: { contains: query } },
+      ],
+    }
     : {};
 
   try {
@@ -33,7 +33,6 @@ export async function GET(request: Request) {
       prisma.paciente.count({ where }),
     ]);
 
-    console.log(totalCount)
     return NextResponse.json({
       data: pacientes,
       totalCount,
