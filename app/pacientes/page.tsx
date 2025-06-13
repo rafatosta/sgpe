@@ -1,96 +1,110 @@
 'use client'
 
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-  FloatingLabel,
-  Button,
-  Pagination
+    Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow,
+    Pagination, FloatingLabel, Button
 } from 'flowbite-react';
 import { useEffect, useState } from 'react';
+import type { Paciente } from '@/types/paciente';
 
-import { Paciente } from '@/types/paciente';
+const pageSize = 15;
 
+function Patients() {
+    const [pacientes, setPacientes] = useState<Paciente[]>([]);
+    const [busca, setBusca] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-export default function PacientesPage() {
-  const [pacientes, setPacientes] = useState<Paciente[]>([]);
-  const [busca, setBusca] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+    useEffect(() => {
+        async function fetchPacientes() {
+            const params = new URLSearchParams({
+                page: currentPage.toString(),
+                query: busca,
+            });
 
-  useEffect(() => {
-    async function fetchPacientes() {
-      const res = await fetch('/api/pacientes');
-      const data = await res.json();
-      setPacientes(data);
-    }
+            try {
+                const res = await fetch(`/api/pacientes?${params.toString()}`);
+                const json = await res.json();
+                setPacientes(json.data);
 
-    fetchPacientes();
-  }, []);
+                const pages = Math.max(1, Math.ceil(json.totalCount / pageSize));
+                setTotalPages(pages);
+            } catch (err) {
+                console.error('Erro ao buscar pacientes:', err);
+                setPacientes([]);
+                setTotalPages(1);
+            }
+        }
 
-  const pacientesFiltrados = pacientes.filter(p =>
-    p.nome.toLowerCase().includes(busca.toLowerCase())
-  );
+        fetchPacientes();
+    }, [currentPage, busca]);
 
-  return (
-    <div className="p-4">
-      <header className="flex justify-between items-center pb-4">
-        <h1 className="text-xl font-bold">Pacientes</h1>
-        <Button color="green" pill>
-          Novo
-        </Button>
-      </header>
+    return (
+        <div>
+            <header>
+                <div className="flex flex-row justify-between items-center pt-2 pb-2">
+                    <h1 className="text-xl font-bold">Pacientes</h1>
+                    <Button color="green" pill>
+                        Novo
+                    </Button>
+                </div>
+            </header>
 
-      <FloatingLabel
-        variant="filled"
-        label="Buscar"
-        value={busca}
-        onChange={(e) => setBusca(e.target.value)}
-        type="text"
-        className="mb-4"
-      />
+            <main>
+                <div className="overflow-x-auto space-y-4">
+                    <FloatingLabel
+                        variant="filled"
+                        label="Buscar"
+                        type="text"
+                        value={busca}
+                        onChange={(e) => {
+                            setBusca(e.target.value);
+                            setCurrentPage(1); // Resetar para a página 1 ao buscar
+                        }}
+                    />
+                    <Table hoverable>
+                        <TableHead>
+                            <TableRow>
+                                <TableHeadCell>Nome</TableHeadCell>
+                                <TableHeadCell>CPF</TableHeadCell>
+                                <TableHeadCell>Telefone</TableHeadCell>
+                                <TableHeadCell>Sexo</TableHeadCell>
+                                <TableHeadCell>Nascimento</TableHeadCell>
+                                <TableHeadCell>Endereço</TableHeadCell>
+                                <TableHeadCell><span className="sr-only">Editar</span></TableHeadCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody className="divide-y">
+                            {pacientes.map((paciente) => (
+                                <TableRow key={paciente.id}>
+                                    <TableCell>{paciente.nome}</TableCell>
+                                    <TableCell>{paciente.cpf}</TableCell>
+                                    <TableCell>{paciente.telefone}</TableCell>
+                                    <TableCell>{paciente.sexo}</TableCell>
+                                    <TableCell>{new Date(paciente.nascimento).toLocaleDateString()}</TableCell>
+                                    <TableCell>{paciente.endereco}</TableCell>
+                                    <TableCell>
+                                        <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Editar</a>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </main>
 
-      <div className="overflow-x-auto">
-        <Table hoverable>
-          <TableHead>
-            <TableRow>
-              <TableHeadCell>Nome</TableHeadCell>
-              <TableHeadCell>CPF</TableHeadCell>
-              <TableHeadCell>Telefone</TableHeadCell>
-              <TableHeadCell>Sexo</TableHeadCell>
-              <TableHeadCell>Nascimento</TableHeadCell>
-              <TableHeadCell>Endereço</TableHeadCell>
-              <TableHeadCell>
-                <span className="sr-only">Editar</span>
-              </TableHeadCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pacientesFiltrados.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell>{p.nome}</TableCell>
-                <TableCell>{p.cpf}</TableCell>
-                <TableCell>{p.telefone}</TableCell>
-                <TableCell>{p.sexo}</TableCell>
-                <TableCell>{new Date(p.nascimento).toLocaleDateString()}</TableCell>
-                <TableCell>{p.endereco}</TableCell>
-                <TableCell>
-                  <a href="#" className="font-medium text-blue-600 hover:underline">
-                    Editar
-                  </a>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            <footer>
+                <div className="flex overflow-x-auto sm:justify-center mt-4">
 
-      <footer className="mt-4 flex justify-center">
-        <Pagination currentPage={currentPage} totalPages={1} onPageChange={setCurrentPage} />
-      </footer>
-    </div>
-  );
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            </footer>
+        </div>
+    );
 }
+
+export default Patients;
