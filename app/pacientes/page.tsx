@@ -1,19 +1,18 @@
 'use client'
 
 import {
-    Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow,
-    Pagination, FloatingLabel, Button
+    Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, FloatingLabel, Button
 } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import type { Paciente } from '@/types/paciente';
-
-const pageSize = 15;
+import { pageSize } from '@/utils/constants';
+import Pagination from '@/components/Pagination';
 
 function Patients() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
     const [busca, setBusca] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalRecords, setTotalRecords] = useState(1);
 
     useEffect(() => {
         async function fetchPacientes() {
@@ -26,13 +25,11 @@ function Patients() {
                 const res = await fetch(`/api/pacientes?${params.toString()}`);
                 const json = await res.json();
                 setPacientes(json.data);
-
-                const pages = Math.max(1, Math.ceil(json.totalCount / pageSize));
-                setTotalPages(pages);
+                setTotalRecords(json.totalCount);
             } catch (err) {
                 console.error('Erro ao buscar pacientes:', err);
                 setPacientes([]);
-                setTotalPages(1);
+                setTotalRecords(1);
             }
         }
 
@@ -94,14 +91,11 @@ function Patients() {
             </main>
 
             <footer>
-                <div className="flex overflow-x-auto sm:justify-center mt-4">
-
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                    />
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalRecords={totalRecords}
+                    onPageChange={setCurrentPage}
+                />
             </footer>
         </div>
     );
