@@ -5,8 +5,8 @@ import {
 } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import type { Paciente } from '@/types/paciente';
-import { pageSize } from '@/utils/constants';
 import Pagination from '@/components/Pagination';
+import Header from '@/components/Header';
 
 function Patients() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -38,15 +38,7 @@ function Patients() {
 
     return (
         <div>
-            <header>
-                <div className="flex flex-row justify-between items-center pt-2 pb-2">
-                    <h1 className="text-xl font-bold">Pacientes</h1>
-                    <Button color="green" pill>
-                        Novo
-                    </Button>
-                </div>
-            </header>
-
+            <Header title="Pacientes" buttonLabel="Novo" onButtonClick={() => null} />
             <main>
                 <div className="overflow-x-auto space-y-4">
                     <FloatingLabel
