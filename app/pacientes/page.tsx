@@ -1,12 +1,11 @@
 'use client'
 
-import {
-    Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, FloatingLabel, Button
-} from 'flowbite-react';
+import { FloatingLabel } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import type { Paciente } from '@/types/paciente';
 import Pagination from '@/components/Pagination';
 import Header from '@/components/Header';
+import Table from '@/components/Table';
 
 function Patients() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -36,6 +35,25 @@ function Patients() {
         fetchPacientes();
     }, [currentPage, busca]);
 
+    const columns = [
+        {
+            header: 'Nome',
+            accessor: (data: Paciente) => data.nome,
+        },
+        {
+            header: 'Telefone',
+            accessor: (data: Paciente) => data.telefone
+        },
+        {
+            header: '',
+            accessor: (data: Paciente) => (
+                <a className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                    Visualizar
+                </a>
+            )
+        }
+    ]
+
     return (
         <div>
             <Header title="Pacientes" buttonLabel="Novo" onButtonClick={() => null} />
@@ -51,34 +69,9 @@ function Patients() {
                             setCurrentPage(1); // Resetar para a página 1 ao buscar
                         }}
                     />
-                    <Table hoverable>
-                        <TableHead>
-                            <TableRow>
-                                <TableHeadCell>Nome</TableHeadCell>
-                                <TableHeadCell>CPF</TableHeadCell>
-                                <TableHeadCell>Telefone</TableHeadCell>
-                                <TableHeadCell>Sexo</TableHeadCell>
-                                <TableHeadCell>Nascimento</TableHeadCell>
-                                <TableHeadCell>Endereço</TableHeadCell>
-                                <TableHeadCell><span className="sr-only">Editar</span></TableHeadCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody className="divide-y">
-                            {pacientes.map((paciente) => (
-                                <TableRow key={paciente.id}>
-                                    <TableCell>{paciente.nome}</TableCell>
-                                    <TableCell>{paciente.cpf}</TableCell>
-                                    <TableCell>{paciente.telefone}</TableCell>
-                                    <TableCell>{paciente.sexo}</TableCell>
-                                    <TableCell>{new Date(paciente.nascimento).toLocaleDateString()}</TableCell>
-                                    <TableCell>{paciente.endereco}</TableCell>
-                                    <TableCell>
-                                        <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Editar</a>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+
+                    <Table data={pacientes} columns={columns} keyExtractor={(data: Paciente) => data.id} />
+
                 </div>
             </main>
 
