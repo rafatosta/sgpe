@@ -11,20 +11,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Sexo {
-  MASCULINO
-  FEMININO
-  OUTRO
+model Paciente {
+  id           Int         @id @default(autoincrement())
+  nome         String
+  nomeSocial   String?
+  email        String?     
+  cpf          String      @unique
+
+  // Relacionamentos
+  telefones    Telefone[]   // 1:N
+  endereco     Endereco?    // 1:1 opcional
+
+  @@map("pacientes")
 }
 
-model Paciente {
-  id         Int      @id @default(autoincrement())
-  nome       String
-  nascimento DateTime
-  sexo       Sexo
-  cpf        String   @unique
-  telefone   String
-  endereco   String
+model Telefone {
+  id          Int       @id @default(autoincrement())
+  numero      String
+  paciente    Paciente  @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  pacienteId  Int
+}
 
-  @@map("pacientes") 
+model Endereco {
+  id           Int       @id @default(autoincrement())
+  endereco     String
+  complemento  String?
+  estado       String
+  cep          String
+  cidade       String
+  paciente     Paciente  @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  pacienteId   Int       @unique  // garante que é 1:1
 }
