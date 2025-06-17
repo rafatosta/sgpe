@@ -6,6 +6,7 @@ import type { Paciente } from '@/types/paciente';
 import Pagination from '@/components/Pagination';
 import Header from '@/components/Header';
 import Table from '@/components/Table';
+import CopyableText from '@/components/CopyableText';
 
 function Patients() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -38,11 +39,12 @@ function Patients() {
     const columns = [
         {
             header: 'Nome',
-            accessor: (data: Paciente) => data.nome,
+            accessor: (data: Paciente) => <CopyableText text={data.nome} />,
         },
         {
             header: 'Email',
-            accessor: (data: Paciente) => data.email || '-',
+            accessor: (data: Paciente) =>
+                data.email ? <CopyableText text={data.email} /> : '-',
         },
         {
             header: 'Telefone',
@@ -55,33 +57,28 @@ function Patients() {
 
                 return (
                     <div className="flex items-center gap-1">
-                        <span>{primeiro.numero}</span>
+                        <CopyableText text={primeiro.numero} />
                         {restantes.length > 0 && (
                             <Tooltip
                                 content={restantes.map((tel, i) => (
-                                    <div key={i}>{tel.numero}</div>
+                                    <div key={i}>
+                                        <CopyableText text={tel.numero} />
+                                    </div>
                                 ))}
-                                trigger="click"
+                                
                                 style="light"
                                 placement="top"
                             >
-                                <Button size="" color="gray" className="ml-2 px-2 py-0.5 text-sm cursor-context-menu">
+                                <button className="ml-2 px-2 py-0.5 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-100">
                                     +
-                                </Button>
+                                </button>
                             </Tooltip>
                         )}
                     </div>
                 );
             },
         },
-        {
-            header: '',
-            accessor: (data: Paciente) => (
-                <a className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                    Visualizar
-                </a>
-            ),
-        },
+        // ...
     ];
 
 
