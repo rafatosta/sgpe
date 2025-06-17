@@ -65,7 +65,7 @@ function Patients() {
                                         <CopyableText text={tel.numero} />
                                     </div>
                                 ))}
-                                
+
                                 style="light"
                                 placement="top"
                             >
@@ -84,7 +84,7 @@ function Patients() {
 
     return (
         <div>
-            <Header title="Pacientes" buttonLabel="Novo" onButtonClick={() => null} />
+            <Header title={`Pacientes (${totalRecords})`} buttonLabel="Novo" onButtonClick={() => null} />
             <main>
                 <div className="overflow-x-auto space-y-4">
                     <FloatingLabel
