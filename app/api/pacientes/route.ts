@@ -14,10 +14,23 @@ export async function GET(request: Request) {
   const where = query
     ? {
       OR: [
-        { nome: { contains: query } },
-        { cpf: { contains: query } },
-        { telefone: { contains: query } },
-        { endereco: { contains: query } },
+        { nome: { contains: query, mode: 'insensitive' } },
+        { cpf: { contains: query, mode: 'insensitive' } },
+        { email: { contains: query, mode: 'insensitive' } },
+        {
+          telefones: {
+            some: {
+              numero: { contains: query, mode: 'insensitive' },
+            },
+          },
+        },
+        {
+          endereco: {
+            is: {
+              endereco: { contains: query, mode: 'insensitive' },
+            },
+          },
+        },
       ],
     }
     : {};
@@ -29,6 +42,10 @@ export async function GET(request: Request) {
         skip,
         take: pageSize,
         orderBy: { nome: 'asc' },
+        include: {
+          telefones: true,
+          endereco: true,
+        },
       }),
       prisma.paciente.count({ where }),
     ]);

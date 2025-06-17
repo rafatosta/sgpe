@@ -1,6 +1,6 @@
 'use client'
 
-import { FloatingLabel } from 'flowbite-react';
+import { FloatingLabel, Tooltip, Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import type { Paciente } from '@/types/paciente';
 import Pagination from '@/components/Pagination';
@@ -41,8 +41,38 @@ function Patients() {
             accessor: (data: Paciente) => data.nome,
         },
         {
+            header: 'Email',
+            accessor: (data: Paciente) => data.email || '-',
+        },
+        {
             header: 'Telefone',
-            accessor: (data: Paciente) => data.telefone
+            accessor: (data: Paciente) => {
+                const telefones = data.telefones || [];
+
+                if (telefones.length === 0) return '-';
+
+                const [primeiro, ...restantes] = telefones;
+
+                return (
+                    <div className="flex items-center gap-1">
+                        <span>{primeiro.numero}</span>
+                        {restantes.length > 0 && (
+                            <Tooltip
+                                content={restantes.map((tel, i) => (
+                                    <div key={i}>{tel.numero}</div>
+                                ))}
+                                trigger="click"
+                                style="light"
+                                placement="top"
+                            >
+                                <Button size="" color="gray" className="ml-2 px-2 py-0.5 text-sm cursor-context-menu">
+                                    +
+                                </Button>
+                            </Tooltip>
+                        )}
+                    </div>
+                );
+            },
         },
         {
             header: '',
@@ -50,9 +80,10 @@ function Patients() {
                 <a className="font-medium text-primary-600 hover:underline dark:text-primary-500">
                     Visualizar
                 </a>
-            )
-        }
-    ]
+            ),
+        },
+    ];
+
 
     return (
         <div>
@@ -71,7 +102,6 @@ function Patients() {
                     />
 
                     <Table data={pacientes} columns={columns} keyExtractor={(data: Paciente) => data.id} />
-
                 </div>
             </main>
 
