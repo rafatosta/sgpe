@@ -1,10 +1,10 @@
 'use client'
 
-import { FloatingLabel, Tooltip, Button } from 'flowbite-react';
+import { FloatingLabel, Tooltip } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import type { Paciente } from '@/types/paciente';
 import Pagination from '@/components/Pagination';
-import Header from '@/components/Header';
+import Link from 'next/link'
 import Table from '@/components/Table';
 import CopyableText from '@/components/CopyableText';
 
@@ -84,7 +84,15 @@ function Patients() {
 
     return (
         <div>
-            <Header title={`Pacientes (${totalRecords})`} buttonLabel="Novo" onButtonClick={() => null} />
+            <header className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white">
+                <h1 className="text-xl font-semibold">{`Pacientes (${totalRecords})`}</h1>
+                <Link href="/pacientes/novo">
+                    <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">
+                        {"Novo"}
+                    </button>
+                </Link>
+            </header>
             <main>
                 <div className="overflow-x-auto space-y-4">
                     <FloatingLabel
