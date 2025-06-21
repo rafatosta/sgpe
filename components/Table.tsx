@@ -14,9 +14,9 @@ interface TableProps<T> {
 
 function Table<T>({ data, columns, keyExtractor }: TableProps<T>) {
     return (
-        <div className="overflow-y-auto">
-            <TableFlowbite hoverable>
-                <TableHead className="sticky top-0 z-40">
+        <div className="max-h-[calc(100vh-160px)] overflow-y-auto">
+            <TableFlowbite hoverable className="min-w-full">
+                <TableHead className="sticky top-0 z-10">
                     <TableRow>
                         {columns.map((column, index) => (
                             <TableHeadCell key={index}>{column.header}</TableHeadCell>
@@ -24,7 +24,7 @@ function Table<T>({ data, columns, keyExtractor }: TableProps<T>) {
                     </TableRow>
 
                 </TableHead>
-                <TableBody className="divide-y overflow-y-auto">
+                <TableBody className="divide-y">
                     {data.map((item, i) => (
                         <TableRow key={keyExtractor(item)}>
                             {columns.map((column, index) => (

@@ -7,6 +7,7 @@ import Pagination from '@/components/Pagination';
 import Link from 'next/link'
 import Table from '@/components/Table';
 import CopyableText from '@/components/CopyableText';
+import { Table as TableFlowbite, TableHead, TableCell, TableBody, TableRow, TableHeadCell } from 'flowbite-react'
 
 export default function Home() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -83,8 +84,8 @@ export default function Home() {
 
 
     return (
-        <div>
-            <header className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white">
+        <div className="h-screen flex flex-col">
+            <header className="flex items-center justify-between h-16 bg-gray-800 text-white px-6 shadow-md z-10">
                 <h1 className="text-xl font-semibold">{`Pacientes (${totalRecords})`}</h1>
                 <Link href="/novo">
                     <button
@@ -93,24 +94,21 @@ export default function Home() {
                     </button>
                 </Link>
             </header>
-            <main>
-                <div className="overflow-x-auto space-y-4">
-                    <FloatingLabel
-                        variant="filled"
-                        label="Buscar"
-                        type="text"
-                        value={busca}
-                        onChange={(e) => {
-                            setBusca(e.target.value);
-                            setCurrentPage(1); // Resetar para a página 1 ao buscar
-                        }}
-                    />
-
-                    <Table data={pacientes} columns={columns} keyExtractor={(data: Paciente) => data.id} />
-                </div>
+            <FloatingLabel
+                variant="filled"
+                label="Buscar"
+                type="text"
+                value={busca}
+                onChange={(e) => {
+                    setBusca(e.target.value);
+                    setCurrentPage(1); // Resetar para a página 1 ao buscar
+                }}
+            />
+            <main className="flex-1 overflow-y-hidden">
+                <Table data={pacientes} columns={columns} keyExtractor={(data: Paciente) => data.id} />
             </main>
 
-            <footer>
+            <footer className="">
                 <Pagination
                     currentPage={currentPage}
                     totalRecords={totalRecords}
