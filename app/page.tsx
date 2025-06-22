@@ -7,7 +7,6 @@ import Pagination from '@/components/Pagination';
 import Link from 'next/link'
 import Table from '@/components/Table';
 import CopyableText from '@/components/CopyableText';
-import { Table as TableFlowbite, TableHead, TableCell, TableBody, TableRow, TableHeadCell } from 'flowbite-react'
 
 export default function Home() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -38,6 +37,10 @@ export default function Home() {
     }, [currentPage, busca]);
 
     const columns = [
+        {
+            header: '#',
+            accessor: (data: Paciente) => <div>{data.id}</div>,
+        },
         {
             header: 'Nome',
             accessor: (data: Paciente) => <CopyableText text={data.nome} />,
@@ -79,7 +82,14 @@ export default function Home() {
                 );
             },
         },
-        // ...
+        {
+            header: '',
+            accessor: (data: Paciente) => (
+                <Link href={`/paciente/${data.id}`} className=" font-medium text-primary-600 hover:underline dark:text-primary-500">
+                    Visualizar
+                </Link>
+            )
+        }
     ];
 
 
