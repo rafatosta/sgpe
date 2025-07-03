@@ -3,7 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-function createWindow(): void {
+import sequelize from './database';
+
+async function createWindow(): Promise<void> {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -16,6 +18,9 @@ function createWindow(): void {
       sandbox: false
     }
   })
+
+  await sequelize.sync();
+
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
