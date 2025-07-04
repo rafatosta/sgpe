@@ -1,29 +1,49 @@
 // models/Atestado.ts
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
-import { Consulta } from './Consulta';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '..';
 
-export class Atestado extends Model {}
+interface AtestadoAttributes {
+  id: number;
+  data: Date;
+  cid: string;
+  consultaId: number;
+}
+
+interface AtestadoCreationAttributes extends Optional<AtestadoAttributes, 'id'> {}
+
+class Atestado extends Model<AtestadoAttributes, AtestadoCreationAttributes>
+  implements AtestadoAttributes {
+  public id!: number;
+  public data!: Date;
+  public cid!: string;
+  public consultaId!: number;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
 Atestado.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true,
+    primaryKey: true
   },
   data: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: false
   },
   cid: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
+  consultaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
 }, {
   sequelize,
   modelName: 'Atestado',
-  tableName: 'atestados',
+  tableName: 'atestados'
 });
 
-Atestado.belongsTo(Consulta, { foreignKey: 'consultaId', onDelete: 'CASCADE' });
-Consulta.hasMany(Atestado, { foreignKey: 'consultaId' });
+export default Atestado;

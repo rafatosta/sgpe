@@ -2,7 +2,9 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import sequelize from './database'
+import seed from './database/seed/seed'
+//import sequelize from './database'
+
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,7 +54,10 @@ app.whenReady().then(() => {
 
   createWindow()
 
-  sequelize.sync({ force: true });
+  //sequelize.sync({ force: true });
+
+  seed();
+
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

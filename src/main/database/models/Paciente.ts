@@ -1,8 +1,41 @@
 // models/Paciente.ts
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '..';
 
-export class Paciente extends Model { }
+interface PacienteAttributes {
+  id: number;
+  nome: string;
+  nomeSocial?: string;
+  email?: string;
+  cpf: string;
+  telefone1: string;
+  telefone2?: string;
+  endereco: string;
+  complemento?: string;
+  estado: string;
+  cep: string;
+  cidade: string;
+}
+
+interface PacienteCreationAttributes extends Optional<PacienteAttributes, 'id'> { }
+
+class Paciente extends Model<PacienteAttributes, PacienteCreationAttributes> implements PacienteAttributes {
+  public id!: number;
+  public nome!: string;
+  public nomeSocial?: string;
+  public email?: string;
+  public cpf!: string;
+  public telefone1!: string;
+  public telefone2?: string;
+  public endereco!: string;
+  public complemento?: string;
+  public estado!: string;
+  public cep!: string;
+  public cidade!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
 Paciente.init({
   id: {
@@ -56,3 +89,5 @@ Paciente.init({
   modelName: 'Paciente',
   tableName: 'pacientes',
 });
+
+export default Paciente;

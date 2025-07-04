@@ -1,25 +1,43 @@
 // models/SolicitacaoExame.ts
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
-import { Consulta } from './Consulta';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '..';
 
-export class SolicitacaoExame extends Model {}
+interface SolicitacaoExameAttributes {
+  id: number;
+  exames: string;
+  consultaId: number;
+}
+
+interface SolicitacaoExameCreationAttributes extends Optional<SolicitacaoExameAttributes, 'id'> {}
+
+class SolicitacaoExame extends Model<SolicitacaoExameAttributes, SolicitacaoExameCreationAttributes>
+  implements SolicitacaoExameAttributes {
+  public id!: number;
+  public exames!: string;
+  public consultaId!: number;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
 SolicitacaoExame.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true,
+    primaryKey: true
   },
   exames: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: false
   },
+  consultaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
 }, {
   sequelize,
   modelName: 'SolicitacaoExame',
-  tableName: 'solicitacoes_exames',
+  tableName: 'solicitacoes_exames'
 });
 
-SolicitacaoExame.belongsTo(Consulta, { foreignKey: 'consultaId', onDelete: 'CASCADE' });
-Consulta.hasMany(SolicitacaoExame, { foreignKey: 'consultaId' });
+export default SolicitacaoExame;

@@ -1,25 +1,43 @@
 // models/Receita.ts
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
-import { Consulta } from './Consulta';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '..';
 
-export class Receita extends Model {}
+interface ReceitaAttributes {
+  id: number;
+  conteudo: string;
+  consultaId: number;
+}
+
+interface ReceitaCreationAttributes extends Optional<ReceitaAttributes, 'id'> {}
+
+class Receita extends Model<ReceitaAttributes, ReceitaCreationAttributes>
+  implements ReceitaAttributes {
+  public id!: number;
+  public conteudo!: string;
+  public consultaId!: number;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
 
 Receita.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true,
+    primaryKey: true
   },
   conteudo: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: false
   },
+  consultaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
 }, {
   sequelize,
   modelName: 'Receita',
-  tableName: 'receitas',
+  tableName: 'receitas'
 });
 
-Receita.belongsTo(Consulta, { foreignKey: 'consultaId', onDelete: 'CASCADE' });
-Consulta.hasMany(Receita, { foreignKey: 'consultaId' });
+export default Receita;
