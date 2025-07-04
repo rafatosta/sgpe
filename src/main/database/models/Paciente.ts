@@ -2,8 +2,8 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '..';
 
-interface PacienteAttributes {
-  id: number;
+export interface PacienteAttributes {
+  id?: number;
   nome: string;
   nomeSocial?: string;
   email?: string;
