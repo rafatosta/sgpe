@@ -1,15 +1,20 @@
-import { Button } from 'antd';
+
+import { HashRouter as Router, Route, Routes } from 'react-router'
+import Home from "./pages/Home";
+import About from "./pages/About";
+
 
 function App(): React.JSX.Element {
-  //const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-      <Button type="primary">Button</Button>
-    </>
+    <div className="flex flex-row h-screen overflow-hidden">
+      <Router>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+        </Routes>
+      </Router>
+    </div>
   )
 }
 
