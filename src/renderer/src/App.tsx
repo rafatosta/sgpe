@@ -7,7 +7,7 @@ import About from "./pages/About";
 function App(): React.JSX.Element {
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden">
+    <div>
       <Router>
         <Routes>
           <Route index element={<Home />} />
@@ -17,5 +17,6 @@ function App(): React.JSX.Element {
     </div>
   )
 }
+
 
 export default App
