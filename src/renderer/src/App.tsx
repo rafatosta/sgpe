@@ -7,14 +7,14 @@ import About from "./pages/About";
 function App(): React.JSX.Element {
 
   return (
-    <div>
+   
       <Router>
         <Routes>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
         </Routes>
       </Router>
-    </div>
+    
   )
 }
 
